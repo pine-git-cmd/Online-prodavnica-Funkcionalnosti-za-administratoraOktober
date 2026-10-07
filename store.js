@@ -1,3 +1,5 @@
+'use strict';
+
 class Artikal {
     constructor(naziv, cena, opis) {
         this.naziv = naziv;
@@ -6,9 +8,51 @@ class Artikal {
     }
 }
 
-// Kreiranje instanci artikala
-const artikal1 = new Artikal("Laptop", 1200.99, "Praktičan i moćan laptop za svakodnevni rad.");
-const artikal2 = new Artikal("Telefon", 799.49, "Moderan pametni telefon sa dugotrajnom baterijom.");
 
-// Dodavanje instanci u niz
-const artikli = [artikal1, artikal2];
+let artikli = [];
+
+
+function createArticleRows() {
+    
+    let tableBody = document.querySelector("#artikli-body") || document.querySelector("#artikli");
+
+    for (let i = 0; i < artikli.length; i++) {
+        let artikal = artikli[i];
+
+        let tr = document.createElement("tr");
+
+   
+        let tdBr = document.createElement("td");
+        tdBr.textContent = i + 1;
+
+       
+        let tdNaziv = document.createElement("td");
+        tdNaziv.textContent = artikal.naziv;
+
+       
+        let tdCena = document.createElement("td");
+        tdCena.textContent = artikal.cena;
+
+        
+        tr.appendChild(tdBr);
+        tr.appendChild(tdNaziv);
+        tr.appendChild(tdCena);
+
+      
+        tableBody.appendChild(tr);
+    }
+}
+
+
+function initializeArticles() {
+    artikli = [
+        new Artikal("Monitor", 165, "27-incni Full HD monitor sa osvezavanjem od 75Hz."),
+        new Artikal("TV", 650, "Smart TV 55 inca sa 4K rezolucijom."),
+        new Artikal("Mis", 20, "Bezicni opticki mis sa podesivim DPI-jem.")
+    ];
+
+    createArticleRows();
+}
+
+
+document.addEventListener('DOMContentLoaded', initializeArticles);
