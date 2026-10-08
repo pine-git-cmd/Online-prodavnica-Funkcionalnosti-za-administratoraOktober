@@ -8,12 +8,23 @@ class Artikal {
     }
 }
 
-
 let artikli = [];
 
 
-function createArticleRows() {
+function displayDetails(artikal) {
+    let detalji = document.querySelector("#artikalDetails") || document.querySelector("#detaljiArtikla");
+
     
+    detalji.innerHTML = "";
+
+    
+    let p = document.createElement("p");
+    p.innerHTML = `Naziv: ${artikal.naziv}<br>Cena: ${artikal.cena}<br>Opis: ${artikal.opis}`;
+
+    detalji.appendChild(p);
+}
+
+function createArticleRows() {
     let tableBody = document.querySelector("#artikli-body") || document.querySelector("#artikli");
 
     for (let i = 0; i < artikli.length; i++) {
@@ -21,28 +32,27 @@ function createArticleRows() {
 
         let tr = document.createElement("tr");
 
-   
         let tdBr = document.createElement("td");
         tdBr.textContent = i + 1;
 
-       
         let tdNaziv = document.createElement("td");
         tdNaziv.textContent = artikal.naziv;
 
-       
         let tdCena = document.createElement("td");
         tdCena.textContent = artikal.cena;
 
-        
         tr.appendChild(tdBr);
         tr.appendChild(tdNaziv);
         tr.appendChild(tdCena);
 
-      
+        // Dodavanje klika na red u tabeli
+        tr.addEventListener('click', function() {
+            displayDetails(artikal);
+        });
+
         tableBody.appendChild(tr);
     }
 }
-
 
 function initializeArticles() {
     artikli = [
@@ -53,6 +63,5 @@ function initializeArticles() {
 
     createArticleRows();
 }
-
 
 document.addEventListener('DOMContentLoaded', initializeArticles);
