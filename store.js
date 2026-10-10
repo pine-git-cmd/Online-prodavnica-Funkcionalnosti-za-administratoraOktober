@@ -10,22 +10,20 @@ class Artikal {
 
 let artikli = [];
 
-
 function displayDetails(artikal) {
     let detalji = document.querySelector("#artikalDetails") || document.querySelector("#detaljiArtikla");
-
-    
     detalji.innerHTML = "";
-
     
     let p = document.createElement("p");
     p.innerHTML = `Naziv: ${artikal.naziv}<br>Cena: ${artikal.cena}<br>Opis: ${artikal.opis}`;
-
     detalji.appendChild(p);
 }
 
 function createArticleRows() {
     let tableBody = document.querySelector("#artikli-body") || document.querySelector("#artikli");
+
+
+    tableBody.innerHTML = "";
 
     for (let i = 0; i < artikli.length; i++) {
         let artikal = artikli[i];
@@ -45,13 +43,42 @@ function createArticleRows() {
         tr.appendChild(tdNaziv);
         tr.appendChild(tdCena);
 
-        // Dodavanje klika na red u tabeli
         tr.addEventListener('click', function() {
             displayDetails(artikal);
         });
 
         tableBody.appendChild(tr);
     }
+}
+
+
+function handleFormSubmission() {
+    let submitBtn = document.querySelector('#submitBtn');
+
+    submitBtn.addEventListener('click', function() {
+        const forma = document.querySelector('#forma');
+        const formData = new FormData(forma);
+
+        const naziv = formData.get('naziv');
+        const cena = formData.get('cena');
+        const opis = formData.get('opis');
+
+       
+        if (!naziv || !cena || !opis) {
+            alert("Molimo vas da popunite sva polja!");
+            return;
+        }
+
+        
+        const novArtikal = new Artikal(naziv, Number(cena), opis);
+        artikli.push(novArtikal);
+
+        
+        createArticleRows();
+
+       
+        forma.reset();
+    });
 }
 
 function initializeArticles() {
@@ -62,6 +89,7 @@ function initializeArticles() {
     ];
 
     createArticleRows();
+    handleFormSubmission(); 
 }
 
 document.addEventListener('DOMContentLoaded', initializeArticles);
