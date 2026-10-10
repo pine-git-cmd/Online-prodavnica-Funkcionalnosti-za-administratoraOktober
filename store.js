@@ -22,7 +22,7 @@ function displayDetails(artikal) {
 function createArticleRows() {
     let tableBody = document.querySelector("#artikli-body") || document.querySelector("#artikli");
 
-
+  
     tableBody.innerHTML = "";
 
     for (let i = 0; i < artikli.length; i++) {
@@ -52,6 +52,28 @@ function createArticleRows() {
 }
 
 
+function saveArticlesToStorage() {
+    localStorage.setItem("artikli", JSON.stringify(artikli));
+}
+
+
+function loadArticlesFromStorage() {
+    const storedArticles = localStorage.getItem("artikli");
+    if (storedArticles) {
+        
+        const parsed = JSON.parse(storedArticles);
+        artikli = parsed.map(item => new Artikal(item.naziv, item.cena, item.opis));
+    } else {
+        
+        artikli = [
+            new Artikal("Monitor", 165, "27-incni Full HD monitor sa osvezavanjem od 75Hz."),
+            new Artikal("TV", 650, "Smart TV 55 inča sa 4K rezolucijom."),
+            new Artikal("Miš", 20, "Bežični optički miš sa podesivim DPI-jem.")
+        ];
+        saveArticlesToStorage();
+    }
+}
+
 function handleFormSubmission() {
     let submitBtn = document.querySelector('#submitBtn');
 
@@ -63,33 +85,28 @@ function handleFormSubmission() {
         const cena = formData.get('cena');
         const opis = formData.get('opis');
 
-       
         if (!naziv || !cena || !opis) {
             alert("Molimo vas da popunite sva polja!");
             return;
         }
 
-        
         const novArtikal = new Artikal(naziv, Number(cena), opis);
         artikli.push(novArtikal);
 
         
-        createArticleRows();
+        saveArticlesToStorage();
 
-       
+        createArticleRows();
         forma.reset();
     });
 }
 
 function initializeArticles() {
-    artikli = [
-        new Artikal("Monitor", 165, "27-incni Full HD monitor sa osvezavanjem od 75Hz."),
-        new Artikal("TV", 650, "Smart TV 55 inca sa 4K rezolucijom."),
-        new Artikal("Mis", 20, "Bezicni opticki mis sa podesivim DPI-jem.")
-    ];
+   
+    loadArticlesFromStorage();
 
     createArticleRows();
-    handleFormSubmission(); 
+    handleFormSubmission();
 }
 
 document.addEventListener('DOMContentLoaded', initializeArticles);
